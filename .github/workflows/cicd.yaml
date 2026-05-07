@@ -29,6 +29,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: aumthakkar/py6app:${{ env.COMMIT_ID }}
 
     outputs:
@@ -76,6 +77,20 @@ jobs:
           --insecure
 
           argocd app sync py6app
+
+          # REPO="https://github.com/aumthakkar/may26-py6app.git"
+          # argocd app create py6app \
+          # --dest-server https://kubernetes.default.svc \
+          # --path charts/py6app \
+          # --repo ${REPO} \
+          # --revision main \
+          # --sync-option CreateNamespace=true \
+          # --sync-policy manual \
+          # --values charts/py6app/values.yaml
+
+
+
+
 
 
 
