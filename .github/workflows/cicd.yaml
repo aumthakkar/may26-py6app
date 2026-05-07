@@ -1,4 +1,4 @@
-name: Backstage IDP CICD pipeline
+name: Backstage IDP CI/CD pipeline
 on:
   push:
     branches:
@@ -32,6 +32,42 @@ jobs:
           tags: aumthakkar/py6app:${{ env.COMMIT_ID }}
 
     outputs:
-      commit_id: ${{ env.COMMIT_ID }}  
+      commit_id: ${{ env.COMMIT_ID }}
+
+  cd:
+    needs: ci
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Install and run yq utility to edit tag value with commit_id
+        run: |
+          sudo apt update && sudo apt install python3-pip -y
+          pip install yq --break-system-packages
+          yq -Yi '.image.tag = ${{ needs.ci.outputs.commit_id }}' charts/py6app/values.yaml
+
+      - name: Commit Changes to GitHub
+        uses: EndBug/add-and-commit@v10
+        with:
+          message: "pushed the image with tag: ${{ needs.ci.outputs.commit_id }}"
+
+      - name: Install ArgoCD CLI and sync app
+        run: |
+          VERSION=$(curl -L -s https://raw.githubusercontent.com/argoproj/argo-cd/stable/VERSION)
+          curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/download/v$VERSION/argocd-linux-amd64
+          sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+          chmod +x /usr/local/bin/argocd
+          rm argocd-linux-amd64
+
+          argocd login argocd-server.argocd \
+          --username ${{ secrets.ARGOCD_USERNAME }} \
+          --password ${{ secrets.ARGOCD_PASSWORD }} \
+          --grpc-web \
+          --insecure
+
+          argocd app sync py6app
+
+
 
         

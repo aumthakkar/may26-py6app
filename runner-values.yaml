@@ -1,0 +1,13 @@
+## Target your specific repository
+githubConfigUrl: "https://github.com/aumthakkar/may26-py6app"
+
+## Use the secret we just created
+githubConfigSecret: orbstack-runner-secret
+
+## The name you will use in your Action's "runs-on"
+runnerScaleSetName: "orbstack-runner"
+
+## Since your controller release is named 'arc'
+controllerServiceAccount:
+  name: arc-gha-rs-controller
+  namespace: arc-runners
