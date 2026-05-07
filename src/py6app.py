@@ -12,7 +12,7 @@ def info():
        "time": time.ctime(),
        "host": socket.gethostname(),
         "env": "dev",
-        "msg": "Hi Pranav, how are you? :-)"
+        "msg": "Hi Pranav, how are you man?"
     })
 
 @app.route('/api/v1/healthz')

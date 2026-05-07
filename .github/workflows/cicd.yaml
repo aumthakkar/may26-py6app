@@ -41,11 +41,19 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
 
-      - name: Install and run yq utility to edit tag value with commit_id
+      # - name: Install and run yq utility to edit tag value with commit_id
+      #   run: |
+      #     sudo apt update && sudo apt install python3-pip -y
+      #     pip install yq --break-system-packages
+      #     yq -Yi '.image.tag = ${{ needs.ci.outputs.commit_id }}' charts/py6app/values.yaml
+
+      - name: Install yq (Binary)
         run: |
-          sudo apt update && sudo apt install python3-pip -y
-          pip install yq --break-system-packages
-          yq -Yi '.image.tag = ${{ needs.ci.outputs.commit_id }}' charts/py6app/values.yaml
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_arm64 -O /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
+                    
+      - name: Update Tag
+        run: yq -i '.image.tag = "${{ needs.ci.outputs.commit_id }}"' charts/py6app/values.yaml
 
       - name: Commit Changes to GitHub
         uses: EndBug/add-and-commit@v10
