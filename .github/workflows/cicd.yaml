@@ -54,7 +54,7 @@ jobs:
           sudo chmod +x /usr/local/bin/yq
 
       - name: Update Tag
-        run: yq -i '.image.tag = "${{ needs.ci.outputs.commit_id }}"' charts/py6app/values.yaml
+        run: yq -Yi '.image.tag = "${{ needs.ci.outputs.commit_id }}"' charts/py6app/values.yaml
 
       - name: Commit Changes to GitHub
         uses: EndBug/add-and-commit@v10
