@@ -42,15 +42,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
 
-      # - name: Install and run yq utility to edit tag value with commit_id
-      #   run: |
-      #     sudo apt update && sudo apt install python3-pip -y
-      #     pip install yq --break-system-packages
-      #     yq -Yi '.image.tag = ${{ needs.ci.outputs.commit_id }}' charts/py6app/values.yaml
-
       - name: Install yq (Binary)
         run: |
-          sudo apt-get update && sudo apt-get install -y wget
+          sudo apt update && sudo apt install -y wget
           sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_arm64 -O /usr/local/bin/yq
           sudo chmod +x /usr/local/bin/yq
 
@@ -80,6 +74,7 @@ jobs:
 
           # REPO="https://github.com/aumthakkar/may26-py6app.git"
           # argocd app create py6app \
+          # --dest-namespace dev
           # --dest-server https://kubernetes.default.svc \
           # --path charts/py6app \
           # --repo ${REPO} \
@@ -87,6 +82,9 @@ jobs:
           # --sync-option CreateNamespace=true \
           # --sync-policy manual \
           # --values charts/py6app/values.yaml
+
+          # argocd app sync ${{ values.app_name }}
+          # argocd app wait ${{ values.app_name }} --timeout 120
 
 
 

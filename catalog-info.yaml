@@ -1,0 +1,13 @@
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: py6app
+  description: Python app that displays time named py6app
+  annotations:
+    github.com/project-slug: aumthakkar/py6app
+    backstage.io/techdocs-ref: dir:. (This one is for Techdocs) 
+spec:
+  type: service
+  owner: development # this is the group we have to create as entities/groups.yaml file as shown below:
+  lifecycle: experimental
