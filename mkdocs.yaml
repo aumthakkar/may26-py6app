@@ -1,0 +1,12 @@
+site_name: 'py6app'
+site_description: 'Main documentation for the py6app'
+repo_url: https://github.com/aumthakkar/may26-py6app
+edit_uri: edit/main/docs
+
+plugins:
+  - techdocs-core
+
+# For sidebar navigation on https://backstage.io/, see `microsite/sidebars.js`
+nav:
+  - Overview:
+      - Getting Started: 'docs/index.md'
